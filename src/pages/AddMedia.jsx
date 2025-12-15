@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAddMediaMutation } from "../features/api/apiSlice";
 import { useLazySearchMoviesQuery } from "../features/api/kinopoiskApiSlice";
-import { useLazyAlbumsSearchQuery, useLazyArtistSearchQuery } from "../features/api/itunesApiSlice"
+import { useLazySearchAlbumsQuery, useLazySearchArtistQuery } from "../features/api/itunesApiSlice"
 import { useLazySearchGamesQuery, useLazySearchGameImagesQuery, useLazyGetGameByIdQuery, useLazyGetGenresListQuery } from "../features/api/gamesdbApiSlice";
 import { useLazySearchAnimeQuery, useLazySearchMangaQuery, useLazySearchAnimeByIdQuery, useLazySearchMangaByIdQuery } from "../features/api/shikimoriApiSlice";
 
@@ -16,6 +16,8 @@ function AddMedia() {
     const [triggerMovieSearch, { data: movieData, isFetching: isSearchingMovies }] = useLazySearchMoviesQuery();
     const [triggerAnimeSearch, { data: animeData, isLoading: isSearchingAnime }] = useLazySearchAnimeQuery();
     const [triggerMangaSearch, { data: mangaData, isLoading: isSearchingManga }] = useLazySearchMangaQuery();
+    const [triggerMusicAlbumSearch, {data: musicAlbumData, isLoading: isSearchingAlbum}] = useLazySearchAlbumsQuery();
+    const [triggerMusicArtistSearch, {data: musicArtistData, isLoading: isSearchingArtist}] = useLazySearchArtistQuery()
     const [triggerAnimeIdSearch] = useLazySearchAnimeByIdQuery();
     const [triggerMangaIdSearch] = useLazySearchMangaByIdQuery();
     const [triggerGamesSearch, { data: gamesData, isLoading: isSearchingGames }] = useLazySearchGamesQuery();
@@ -206,6 +208,34 @@ function AddMedia() {
                 }
             },
         },
+        music_album: {
+            triggerFunction: (searchTerm) => triggerMusicAlbumSearch( searchTerm ),
+            normalizeFunction: (album) => ({ id: album.collectionId, title: album.collectionName  + ' от ' + album.artistName, year: album.releaseDate?.slice(0,4) || 'N/A', posterPreview: album.artworkUrl100, rawObject: album }),
+            toSendToDb: (finalTitle) => ({
+                title: finalTitle, description: formData.description, category: formData.category, added_by: user.id,
+                poster_url: mediaObject?.artworkUrl100 
+                ? mediaObject.artworkUrl100.replace('100x100bb', '600x600bb') 
+                : null,
+                external_id: mediaObject?.collectionId?.toString() || null,
+                meta_data: mediaObject ? { year: mediaObject.releaseDate?.slice(0,4) || 'N/A' } : {}
+            }),
+            processSelection: (album) => setMediaObject(album.rawObject),
+        },
+        music_artist: {
+            triggerFunction: (searchTerm) => triggerMusicArtistSearch( searchTerm ),
+            normalizeFunction: (artist) => ({ id: artist.artistId, title: artist.artistName, posterPreview: 'https://www.shutterstock.com/image-vector/minimalist-avatar-icon-blank-face-260nw-2536455943.jpg', rawObject: artist }),
+            toSendToDb: (finalTitle) => ({
+                title: finalTitle, description: formData.description, category: formData.category, added_by: user.id,
+                poster_url: 'https://www.shutterstock.com/image-vector/minimalist-avatar-icon-blank-face-260nw-2536455943.jpg',
+                external_id: mediaObject?.artistId?.toString() || null,
+                meta_data: mediaObject ? { 
+                    genres: mediaObject.primaryGenreName 
+                        ? [{ genre: mediaObject.primaryGenreName }] 
+                        : [] 
+                } : {}
+            }),
+            processSelection: (artist) => setMediaObject(artist.rawObject),
+        }
     }), [user, formData, mediaObject]); 
 
     useEffect(() => {
@@ -220,7 +250,7 @@ function AddMedia() {
     }, [searchQuery, formData.category, isInputFocused, categoryConfig]);
 
     useEffect(() => {
-        const dataMap = { movie: movieData, series: movieData, anime: animeData, manga: mangaData, game: gamesData };
+        const dataMap = { movie: movieData, series: movieData, anime: animeData, manga: mangaData, game: gamesData, music_album: musicAlbumData, music_artist: musicArtistData};
         const currentData = dataMap[formData.category];
         if (isInputFocused && currentData) {
             const normalizedData = currentData.map(categoryConfig[formData.category].normalizeFunction);
@@ -228,7 +258,7 @@ function AddMedia() {
         } else {
             setSearchResults([]);
         }
-    }, [gamesData, movieData, animeData, mangaData, formData.category, isInputFocused, categoryConfig]);
+    }, [musicArtistData, musicAlbumData, gamesData, movieData, animeData, mangaData, formData.category, isInputFocused, categoryConfig]);
 
     const handleResultSelect = (selectedItem) => {
         setFormData({ ...formData, title: selectedItem.title, description: `${selectedItem.title} (${selectedItem.year})` });
@@ -257,7 +287,7 @@ function AddMedia() {
         }
     };
 
-    const isSearching = isSearchingMovies || isSearchingAnime || isSearchingManga || isSearchingGames;
+    const isSearching = isSearchingMovies || isSearchingAnime || isSearchingManga || isSearchingGames || isSearchingAlbum || isSearchingArtist;
 
     return (
         <div className="min-h-screen bg-gray-950 text-white p-4 sm:p-8 flex items-center justify-center">
@@ -274,6 +304,8 @@ function AddMedia() {
                         <option value="anime">Аниме</option>
                         <option value="manga">Манга</option>
                         <option value="game">Игра</option>
+                        <option value="music_album">Альбом</option>
+                        <option value="music_artist">Муз-исполнитель</option>
                     </select>
                 </div>
                 <div className="relative">

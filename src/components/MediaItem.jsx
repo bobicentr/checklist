@@ -64,11 +64,13 @@ function MediaItem({ item }) {
     
 
     const mediaCategory = {
-        movie:      { text: 'ФИЛЬМ' },
-        series:     { text: 'СЕРИАЛ' },
-        anime:      { text: 'АНИМЕ'},
-        manga:      { text: 'МАНГА'},
-        game:       { text: 'ИГРУЛЬКА'}
+        movie:        { text: 'ФИЛЬМ' },
+        series:       { text: 'СЕРИАЛ' },
+        anime:        { text: 'АНИМЕ'},
+        manga:        { text: 'МАНГА'},
+        game:         { text: 'ИГРУЛЬКА'},
+        music_album:  { text: 'МУЗЫЧКА'},
+        music_artist: { text: 'МУЗЫКАНТ'}
     }
 
     // Вычисляем рейтинг (цифры)
