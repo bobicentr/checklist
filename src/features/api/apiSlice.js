@@ -13,7 +13,7 @@ export const apiSlice = createApi({
       queryFn: async () => {
         const { data, error } = await supabase
           .from('media_items')
-          .select('*')
+          .select('*, profiles(name)')
           .order('created_at', { ascending: false });
         
         if (error) return { error };

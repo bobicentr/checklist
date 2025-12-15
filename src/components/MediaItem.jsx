@@ -84,6 +84,7 @@ function MediaItem({ item }) {
     const CurrentCategory = mediaCategory[item.category]
     const CurrentStatus = statusConfig[localStatus]
     const CurrentFriendRating = friendRatingConfig[localRating];
+    const author = item.profiles?.name || 'Нинаю'
 
     return (
         <div className="relative flex flex-col h-full bg-slate-900 rounded-2xl border border-slate-800 shadow-lg overflow-hidden group hover:border-slate-700 transition-colors">
@@ -139,7 +140,8 @@ function MediaItem({ item }) {
                                 <CircleDashed className="w-6 h-6 sm:w-5 sm:h-5" />
                              </div>
                         )}
-                    </div>  
+                    </div>
+                    <p className="font-normal text-slate-400">Добавил {author}</p>
                     {/* ПРАВАЯ ЧАСТЬ: Оценка друга */}
                     <div className="flex gap-2">
                          {CurrentFriendRating && (
