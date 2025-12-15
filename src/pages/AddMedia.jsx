@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAddMediaMutation } from "../features/api/apiSlice";
 import { useLazySearchMoviesQuery } from "../features/api/kinopoiskApiSlice";
-// ОБНОВИЛ ИМПОРТ: useLazyGetGenresListQuery
+import { useLazyAlbumsSearchQuery, useLazyArtistSearchQuery } from "../features/api/itunesApiSlice"
 import { useLazySearchGamesQuery, useLazySearchGameImagesQuery, useLazyGetGameByIdQuery, useLazyGetGenresListQuery } from "../features/api/gamesdbApiSlice";
 import { useLazySearchAnimeQuery, useLazySearchMangaQuery, useLazySearchAnimeByIdQuery, useLazySearchMangaByIdQuery } from "../features/api/shikimoriApiSlice";
 

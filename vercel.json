@@ -1,0 +1,16 @@
+{
+    "rewrites": [
+      {
+        "source": "/api-games/:match*",
+        "destination": "https://api.thegamesdb.net/:match*"
+      },
+      {
+        "source": "/api-music/:match*",
+        "destination": "https://itunes.apple.com/:match*"
+      },
+      {
+        "source": "/(.*)",
+        "destination": "/index.html"
+      }
+    ]
+  }

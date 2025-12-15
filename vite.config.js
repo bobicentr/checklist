@@ -17,7 +17,13 @@ export default defineConfig({
         
         // 'rewrite' - это функция, которая убирает ваш префикс из URL
         rewrite: (path) => path.replace(/^\/api-games/, ''),
+      }, 
+      '/api-music': {
+        target: 'https://itunes.apple.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api-music/, ''),
       }
+      
     }
   }
 })
