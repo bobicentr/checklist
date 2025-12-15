@@ -13,24 +13,25 @@ export const itunesApiSlice = createApi({
                 const results = response.results || [];
                 const uniqueAlbums = [];
                 const seenIds = new Set();
-                const searchLower = arg.toLowerCase(); // Приводим поиск к нижнему регистру
+                
+                // 1. Разбиваем поисковый запрос на отдельные слова
+                // "code80 tears" -> ["code80", "tears"]
+                const searchTerms = arg.toLowerCase().split(' ').filter(word => word.length > 0);
         
                 results.forEach((item) => {
-                    // 1. Базовая проверка на целостность данных
                     if (!item.collectionId || !item.collectionName || !item.artistName) return;
         
-                    // 2. Проверка на дубликаты
                     if (seenIds.has(item.collectionId)) return;
         
-                    // 3. ФИЛЬТР "ЛЕВЫХ" ФИТОВ
-                    // Проверяем: содержится ли поисковое слово в Имени Артиста ИЛИ в Названии Альбома?
-                    const artistMatch = item.artistName.toLowerCase().includes(searchLower);
-                    const albumMatch = item.collectionName.toLowerCase().includes(searchLower);
+                    // 2. Создаем одну большую строку из Артиста и Названия альбома
+                    const itemText = `${item.artistName} ${item.collectionName}`.toLowerCase();
         
-                    // Если ни там, ни там нет совпадения — значит это какой-то левый фит, пропускаем
-                    if (!artistMatch && !albumMatch) return;
+                    // 3. ПРОВЕРКА: Все ли слова из запроса есть в этой строке?
+                    // Если ищем "code80 tears", то и "code80", и "tears" должны быть в itemText
+                    const isMatch = searchTerms.every(term => itemText.includes(term));
         
-                    // Если всё ок — добавляем
+                    if (!isMatch) return;
+        
                     seenIds.add(item.collectionId);
                     uniqueAlbums.push(item);
                 });
