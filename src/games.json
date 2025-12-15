@@ -1,0 +1,95 @@
+[
+    {
+      "id": 4,
+      "game_title": "Ведьмак 3: Дикая Охота",
+      "poster_url": "https://image.api.playstation.com/vulcan/img/rnd/202010/2614/itb1BCp26gQpew2U3pQo768a.png",
+      "release_date": "2015-05-19",
+      "platform": 1,
+      "players": 1,
+      "overview": "Вы — Геральт из Ривии, наёмный убийца чудовищ. Вы путешествуете по миру, раздираемому войной и кишащему чудовищами, чтобы найти Цири — дитя предназначения, живое оружие, способное изменить облик мира.",
+      "last_updated": "2023-12-01 10:00:00",
+      "rating": "M - Mature",
+      "coop": "No",
+      "youtube": "https://www.youtube.com/watch?v=c0i88t0Kacs",
+      "os": "64-bit Windows 7, 64-bit Windows 8 (8.1)",
+      "processor": "Intel CPU Core i5-2500K 3.3GHz / AMD CPU Phenom II X4 940",
+      "ram": "6 GB RAM",
+      "hdd": "35 GB available space",
+      "video": "Nvidia GPU GeForce GTX 660 / AMD GPU Radeon HD 7870",
+      "sound": "DirectX compatible sound card",
+      "developers": [
+        { "id": 101, "name": "CD PROJEKT RED" }
+      ],
+      "genres": [
+        { "id": 12, "name": "Role-Playing" },
+        { "id": 5, "name": "Action" }
+      ],
+      "publishers": [
+        { "id": 201, "name": "CD PROJEKT RED" }
+      ],
+      "alternates": [
+        { "id": 301, "title": "The Witcher 3: Wild Hunt" }
+      ]
+    },
+    {
+      "id": 2623,
+      "game_title": "Cyberpunk 2077",
+      "poster_url": "https://image.api.playstation.com/vulcan/img/rnd/202103/0115/J2a6v2EC7yYn227d8rPQYV3S.png",
+      "release_date": "2020-12-10",
+      "platform": 1,
+      "players": 1,
+      "overview": "Cyberpunk 2077 — это приключенческая ролевая игра с открытым миром, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках уникального импланта, позволяющего обрести бессмертие.",
+      "last_updated": "2024-03-05 12:00:00",
+      "rating": "M - Mature",
+      "coop": "No",
+      "youtube": "https://www.youtube.com/watch?v=8X2kIfS6fb8",
+      "os": "64-bit Windows 10",
+      "processor": "Intel Core i7-6700 or AMD Ryzen 5 1600",
+      "ram": "12 GB RAM",
+      "hdd": "70 GB SSD available space",
+      "video": "GeForce GTX 1060 6GB or Radeon RX 580 8GB",
+      "sound": "DirectX compatible sound card",
+      "developers": [
+        { "id": 101, "name": "CD PROJEKT RED" }
+      ],
+      "genres": [
+        { "id": 12, "name": "Role-Playing" }
+      ],
+      "publishers": [
+        { "id": 201, "name": "CD PROJEKT RED" }
+      ],
+      "alternates": []
+    },
+    {
+      "id": 57,
+      "game_title": "Red Dead Redemption 2",
+      "poster_url": "https://image.api.playstation.com/vulcan/img/rnd/202010/2217/LsaRvB2dfbY2s2iaOASf120M.png",
+      "release_date": "2018-10-26",
+      "platform": 7,
+      "players": 1,
+      "overview": "Америка, 1899 год. Эпоха Дикого Запада подходит к концу. После неудачного ограбления банда Ван дер Линде вынуждена скрываться. Артур Морган и другие члены банды должны грабить, воровать и сражаться, чтобы выжить в суровом сердце Америки.",
+      "last_updated": "2023-11-15 18:30:00",
+      "rating": "M - Mature",
+      "coop": "Yes",
+      "youtube": "https://www.youtube.com/watch?v=eaW0tYpxyp0",
+      "os": "Windows 10 - April 2018 Update (v1803)",
+      "processor": "Intel Core i7-4770K / AMD Ryzen 5 1500X",
+      "ram": "12 GB RAM",
+      "hdd": "150 GB available space",
+      "video": "Nvidia GeForce GTX 1060 6GB / AMD Radeon RX 480 4GB",
+      "sound": "DirectX compatible sound card",
+      "developers": [
+        { "id": 102, "name": "Rockstar Studios" }
+      ],
+      "genres": [
+        { "id": 5, "name": "Action" },
+        { "id": 10, "name": "Adventure" }
+      ],
+      "publishers": [
+        { "id": 202, "name": "Rockstar Games" }
+      ],
+      "alternates": [
+        { "id": 302, "title": "RDR2" }
+      ]
+    }
+  ]
