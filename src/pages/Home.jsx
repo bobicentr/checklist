@@ -9,6 +9,7 @@ import MediaModal from "../components/MediaModal";
 
 export default function Home() {
 
+  const [itemToEdit, setItemToEdit] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const category = useSelector((state) => state.filters.category);
@@ -52,14 +53,14 @@ export default function Home() {
               ) : null}
               
               {media?.map((item) => (
-                <MediaItem key={item.id} item={item} />
+                <MediaItem key={item.id} item={item} setItemToEdit={setItemToEdit} setIsModalOpen={setIsModalOpen} />
               ))}
             </div>
           </div>
         )}
       </div>
       {isModalOpen && (
-        <MediaModal onClose={() => setIsModalOpen(false)} />
+        <MediaModal onClose={() => setIsModalOpen(false)} itemToEdit={itemToEdit}/>
       )}
     </div>
   );

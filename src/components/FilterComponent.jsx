@@ -11,7 +11,7 @@ const CATEGORIES = [
     { id: 'manga', label: 'Манга' },
     { id: 'game', label: 'Игры' },
     { id: 'music_album', label: 'Альбом' },
-    { id: 'music-artist', label: 'Артист' },
+    { id: 'music_artist', label: 'Артист' },
 ];
 
 function FilterComponent() {
@@ -40,7 +40,7 @@ function FilterComponent() {
                             onClick={() => changeCategory(cat.id)}
                             // 3. Условные стили
                             className={`
-                                px-4 py-2 rounded-xl text-lg font-medium transition-all duration-200
+                                px-4 py-2 rounded-xl text-lg font-medium transition-all duration-200 lg:w-full w-full
                                 ${isActive 
                                     ? 'bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 border border-blue-600/20' // Стиль АКТИВНОЙ
                                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800' // Стиль ОБЫЧНОЙ

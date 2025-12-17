@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 // useNavigate убрали, он тут не нужен
-import { useAddMediaMutation } from "../features/api/apiSlice";
+import { useAddMediaMutation, useUpdateMediaMutation } from "../features/api/apiSlice";
 import { useLazySearchMoviesQuery } from "../features/api/kinopoiskApiSlice";
 import { useLazySearchAlbumsQuery, useLazySearchArtistQuery } from "../features/api/itunesApiSlice"
 import { useLazySearchGamesQuery, useLazySearchGameImagesQuery, useLazyGetGameByIdQuery, useLazyGetGenresListQuery } from "../features/api/gamesdbApiSlice";
 import { useLazySearchAnimeQuery, useLazySearchMangaQuery, useLazySearchAnimeByIdQuery, useLazySearchMangaByIdQuery } from "../features/api/shikimoriApiSlice";
 
 // ПРИНИМАЕМ PROP onClose
-function MediaModal({ onClose }) {
+function MediaModal({ onClose, itemToEdit }) {
     const user = useSelector((state) => state.auth.user);
     const [addMedia, { isLoading: isAdding }] = useAddMediaMutation();
     
@@ -24,9 +24,12 @@ function MediaModal({ onClose }) {
     const [triggerGameImagesSearch] = useLazySearchGameImagesQuery();
     const [triggerGameById] = useLazyGetGameByIdQuery();
     const [triggerGetGenresList] = useLazyGetGenresListQuery();
+    const [triggerUpdateMedia, { isLoading: isUpdating }] = useUpdateMediaMutation();
 
-    // --- ТВОИ СТЕЙТЫ (без изменений) ---
-    const [searchQuery, setSearchQuery] = useState('');
+
+    const [searchQuery, setSearchQuery] = useState(itemToEdit ? itemToEdit.title : '');
+    const [isDisabled, setIsDisabled] = useState(itemToEdit ? true : false);
+    const [itemPic, setItemPic] = useState(itemToEdit ? itemToEdit.poster_url : '');
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -37,7 +40,10 @@ function MediaModal({ onClose }) {
     const [mediaObject, setMediaObject] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // --- ТВОИ ХЕНДЛЕРЫ И ФУНКЦИИ (без изменений) ---
+    useEffect(() => {
+        formData.description = itemToEdit ? itemToEdit.description : '';
+    }, [itemToEdit]);
+
     const handlers = useMemo(() => ({
         setMediaObj: setMediaObject,
         setIsProcessing: setIsProcessing,
@@ -215,10 +221,14 @@ function MediaModal({ onClose }) {
         const newItem = categoryConfig[formData.category].toSendToDb(finalTitle);
 
         try {
-            await addMedia(newItem).unwrap();
-            onClose(); // <--- ЗДЕСЬ ВЫЗЫВАЕМ ЗАКРЫТИЕ
+            if (itemToEdit) {
+                await triggerUpdateMedia({ id: itemToEdit.id, description: formData.description, poster_url: itemPic }).unwrap();
+            } else { 
+                await addMedia(newItem).unwrap();
+            }
+            onClose();
         } catch (error) {
-            console.error("Не удалось добавить запись:", error);
+            console.error("Не поучилось:", error);
         }
     };
 
@@ -252,7 +262,7 @@ function MediaModal({ onClose }) {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                     
                     {/* Выбор категории */}
-                    <div>
+                    { !itemToEdit && <div>
                         <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-300">Категория</label>
                         <select id="category" value={formData.category} onChange={handleFormChange} className="bg-gray-800 border border-gray-700 text-white text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors">
                             <option value="movie">Фильм</option>
@@ -264,6 +274,8 @@ function MediaModal({ onClose }) {
                             <option value="music_artist">Муз-исполнитель</option>
                         </select>
                     </div>
+                    }
+                    
 
                     {/* Поиск */}
                     <div className="relative">
@@ -272,16 +284,19 @@ function MediaModal({ onClose }) {
                             type="text" id="search-input" value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onFocus={() => setIsInputFocused(true)}
+                            disabled={isDisabled}
                             onBlur={() => setTimeout(() => setIsInputFocused(false), 200)}
-                            className="bg-gray-800 border border-gray-700 text-white text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors placeholder-gray-500"
+                            className={`bg-gray-800 border border-gray-700 text-white text-sm rounded-xl 
+                            focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors 
+                            placeholder-gray-500`}
                             placeholder="Начните вводить..." autoComplete="off" required 
                         />
                         
                         {/* Индикатор поиска */}
-                        {isSearching && isInputFocused && <div className="absolute right-3 top-10 text-gray-400 text-xs animate-pulse">Ищем...</div>}
+                        {isSearching && !itemToEdit && isInputFocused && <div className="absolute right-3 top-10 text-gray-400 text-xs animate-pulse">Ищем...</div>}
                         
                         {/* Выпадающий список результатов */}
-                        {searchResults.length > 0 && isInputFocused && (
+                        {searchResults.length > 0 && !itemToEdit && isInputFocused && (
                             <ul className="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600">
                                 {searchResults.map((item) => (
                                     <li key={`${formData.category}-${item.id}`}
@@ -297,8 +312,18 @@ function MediaModal({ onClose }) {
                             </ul>
                         )}
                     </div>
-
-                    {/* Описание */}
+                    { itemToEdit &&
+                        <div>
+                        <label htmlFor="item_pic" className="block mb-2 text-sm font-medium text-gray-300">Ссылка на фоточку</label>
+                        <input 
+                            type="text" id="item_pic" value={itemPic}
+                            onChange={(e) => setItemPic(e.target.value)}
+                            className={`bg-gray-800 border border-gray-700 text-white text-sm rounded-xl 
+                            focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors 
+                            placeholder-gray-500`} autoComplete="off"  
+                        />    
+                    </div>
+                    }
                     <div>
                         <label htmlFor="description" className="block mb-2 text-sm font-medium text-gray-300">Краткое описание</label>
                         <textarea 
@@ -319,7 +344,7 @@ function MediaModal({ onClose }) {
                         </button>
                         <button type="submit" disabled={isAdding || isProcessing}
                             className={`flex-2 text-white font-medium rounded-xl text-sm py-3 text-center transition-all shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed ${isProcessing ? 'bg-gray-700' : 'bg-blue-600 hover:bg-blue-500'}`}>
-                            {isAdding ? 'Добавляем...' : isProcessing ? 'Загрузка...' : 'Добавить'}
+                            {isAdding ? 'Добавляем...' : isProcessing ? 'Загрузка...' : isUpdating ? 'Обновляется' : 'Добавить'}
                         </button>
                     </div>
                 </form>

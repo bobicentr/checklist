@@ -5,7 +5,7 @@ import { MoreVertical, Pencil, Trash } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { selectUserId } from '../features/auth/authSlice';
 
-function MediaItem({ item }) {
+function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
     const { meta_data } = item;
     const [updateMedia, {isLoading}] = useUpdateMediaMutation()
     const [deleteMedia, {isLoadingAfterDelete}] = useDeleteMediaMutation()
@@ -143,7 +143,8 @@ function MediaItem({ item }) {
                                 <button 
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        onEdit(item);
+                                        setItemToEdit(item);
+                                        setIsModalOpen(true);
                                         setIsMenuOpen(false);
                                     }}
                                     className="flex items-center gap-2 w-full px-3 py-2 text-sm font-medium text-gray-200 hover:text-white hover:bg-white/10 rounded-lg transition-colors text-left"
