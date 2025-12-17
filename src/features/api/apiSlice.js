@@ -60,8 +60,20 @@ export const apiSlice = createApi({
           return { data };
         },
         invalidatesTags: ['Media'],
+    }),
+    deleteMedia: builder.mutation({
+      queryFn: async (id) => {
+        const {data, error} = await supabase
+            .from('media_items')
+            .delete()
+            .eq('id', id)
+            .select();
+        if (error) return {error};
+        return {data};
+      },
+      invalidatesTags: ['Media'],
     })
   }),
 });
 
-export const { useGetMediaQuery, useAddMediaMutation, useUpdateMediaMutation } = apiSlice;
+export const { useGetMediaQuery, useAddMediaMutation, useUpdateMediaMutation, useDeleteMediaMutation } = apiSlice;

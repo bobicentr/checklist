@@ -229,32 +229,23 @@ function MediaModal({ onClose }) {
         // 1. BACKDROP (Фон на весь экран)
         <div 
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-            onClick={onClose} // Клик по фону закрывает модалку
+            onClick={onClose}
         >
             
             {/* 2. МОДАЛЬНОЕ ОКНО */}
             <div 
-                className="
-                    relative w-full max-w-xl bg-gray-900 
-                    rounded-2xl border border-gray-800 shadow-2xl 
-                    flex flex-col gap-6 p-6 sm:p-8 
-                    max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent
-                "
-                onClick={(e) => e.stopPropagation()} // Клик внутри окна НЕ закрывает его
-            >
-                
-                {/* Кнопка ЗАКРЫТЬ (Крестик) */}
+                className="relative w-full max-w-xl bg-gray-900 rounded-2xl border border-gray-800 shadow-2xl 
+                    flex flex-col gap-6 p-6 sm:p-8 max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
+                onClick={(e) => e.stopPropagation()} >
                 <button 
                     onClick={onClose} 
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-700 rounded-lg transition"
-                >
+                    className="absolute top-2 right-2 px-2 py-1 lg:px-3 lg:py-2 text-gray-400 hover:text-white bg-gray-800/50 hover:bg-gray-700 rounded-lg transition">
                     ✕
                 </button>
 
                 {/* Заголовок */}
                 <div>
-                    <h2 className="text-2xl font-bold text-white">Добавить новое</h2>
-                    <p className="text-gray-400 text-sm mt-1">Найдите или создайте запись вручную</p>
+                    <h2 className="text-2xl font-bold text-white">Добавить новую запись</h2>
                 </div>
 
                 {/* ФОРМА (Такая же как была) */}
@@ -327,7 +318,7 @@ function MediaModal({ onClose }) {
                             Отмена
                         </button>
                         <button type="submit" disabled={isAdding || isProcessing}
-                            className={`flex-[2] text-white font-medium rounded-xl text-sm py-3 text-center transition-all shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed ${isProcessing ? 'bg-gray-700' : 'bg-blue-600 hover:bg-blue-500'}`}>
+                            className={`flex-2 text-white font-medium rounded-xl text-sm py-3 text-center transition-all shadow-lg shadow-blue-900/20 disabled:opacity-50 disabled:cursor-not-allowed ${isProcessing ? 'bg-gray-700' : 'bg-blue-600 hover:bg-blue-500'}`}>
                             {isAdding ? 'Добавляем...' : isProcessing ? 'Загрузка...' : 'Добавить'}
                         </button>
                     </div>
