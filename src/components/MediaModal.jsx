@@ -8,7 +8,7 @@ import { useLazySearchGamesQuery, useLazySearchGameImagesQuery, useLazyGetGameBy
 import { useLazySearchAnimeQuery, useLazySearchMangaQuery, useLazySearchAnimeByIdQuery, useLazySearchMangaByIdQuery } from "../features/api/shikimoriApiSlice";
 
 // ПРИНИМАЕМ PROP onClose
-function MediaModal({ onClose, itemToEdit }) {
+function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
     const user = useSelector((state) => state.auth.user);
     const [addMedia, { isLoading: isAdding }] = useAddMediaMutation();
     
@@ -223,6 +223,7 @@ function MediaModal({ onClose, itemToEdit }) {
         try {
             if (itemToEdit) {
                 await triggerUpdateMedia({ id: itemToEdit.id, description: formData.description, poster_url: itemPic }).unwrap();
+                setItemToEdit(null);
             } else { 
                 await addMedia(newItem).unwrap();
             }

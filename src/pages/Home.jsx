@@ -60,7 +60,7 @@ export default function Home() {
         )}
       </div>
       {isModalOpen && (
-        <MediaModal onClose={() => setIsModalOpen(false)} itemToEdit={itemToEdit}/>
+        <MediaModal onClose={() => setIsModalOpen(false)} itemToEdit={itemToEdit} setItemToEdit={setItemToEdit}/>
       )}
     </div>
   );
