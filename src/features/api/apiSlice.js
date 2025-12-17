@@ -1,26 +1,41 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 import { supabase } from '../../supabaseClient';
-import { useSelector } from 'react-redux';
+// Убрали useSelector — он здесь не нужен
 
 export const apiSlice = createApi({
+  // Убрали initialState — apiSlice это не место для хранения фильтров
   reducerPath: 'api',
-  // fakeBaseQuery — потому что мы используем библиотеку supabase, а не обычный fetch
   baseQuery: fakeBaseQuery(),
-  tagTypes: ['Media'], // Метка, чтобы обновлять список при добавлении
+  tagTypes: ['Media'],
   endpoints: (builder) => ({
-    // Получить список (пока просто Select All)
+    
+    // Принимаем объект args, в котором лежат category и userId
     getMedia: builder.query({
-      queryFn: async () => {
-        const { data, error } = await supabase
-          .from('media_items')
-          .select('*, profiles(name)')
-          .order('created_at', { ascending: false });
-        
+      queryFn: async (args) => {
+        const { category, userId } = args || {}; // Деструктуризация с защитой от undefined
+
+        let query = supabase
+            .from('media_items')
+            .select('*, profiles(name)')
+            .order('created_at', { ascending: false });
+
+        // Логика фильтрации по Категории
+        if (category && category !== 'all') {
+          query = query.eq('category', category);
+        }
+
+        // Логика фильтрации по Юзеру (добавили под твой план)
+        if (userId && userId !== 'all') {
+          query = query.eq('added_by', userId); // Убедись, что колонка называется added_by
+        }
+
+        const { data, error } = await query;
         if (error) return { error };
         return { data };
       },
       providesTags: ['Media'],
     }),
+
     addMedia: builder.mutation({
       queryFn: async (newItem) => {
         const { data, error } = await supabase
@@ -31,13 +46,14 @@ export const apiSlice = createApi({
         if (error) return { error };
         return { data };
       },
-      invalidatesTags: ['Media'], // Не забудь это, чтобы обновился список!
+      invalidatesTags: ['Media'],
     }),
+
     updateMedia: builder.mutation({
-      queryFn: async ({ id, ...updates }) => { // ПРАВИЛЬНО! 
+      queryFn: async ({ id, ...updates }) => { 
           const { data, error } = await supabase
               .from('media_items')
-              .update(updates) // Обновляем все поля, которые пришли в updates
+              .update(updates)
               .eq('id', id)
               .select();
           if (error) return { error };

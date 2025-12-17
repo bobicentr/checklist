@@ -87,18 +87,18 @@ function MediaItem({ item }) {
     const author = item.profiles?.name || 'Нинаю'
 
     return (
-        <div className="relative flex flex-col h-full bg-slate-900 rounded-2xl border border-slate-800 shadow-lg overflow-hidden group hover:border-slate-700 transition-colors">
+        <div className="relative flex lg:flex-col md:h-full bg-slate-900 rounded-2xl border border-slate-800 shadow-lg overflow-hidden group hover:border-slate-700 transition-colors">
             
             {/* Картинка */}
-            <div className="relative h-64 sm:h-60 w-full overflow-hidden">
+            <div className="relative w-28 shrink-0 lg:h-60 lg:w-full overflow-hidden">
                 <img 
-                    className="w-full h-full object-cover object-top"
+                    className="w-full h-full lg:object-cover lg:object-top"
                     src={item.poster_url} 
                     alt={item.title} 
                 />
                 
                 {formattedRating && (
-                    <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-white text-sm sm:text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
+                    <div className="absolute top-10 left-2 lg:top-2 lg:right-2 lg:left-auto bg-black/70 backdrop-blur-md text-white text-sm sm:text-xs font-bold px-2 py-1 rounded flex items-center gap-1">
                         <span>{formattedRating}</span>
                         <Star className="w-4 h-4 sm:w-3 sm:h-3 text-yellow-400 fill-current" />
                     </div>
@@ -110,27 +110,27 @@ function MediaItem({ item }) {
             </div>
 
             {/* Контент */}
-            <div className="flex flex-col grow p-4">
-                <h2 className="text-xl sm:text-lg font-bold text-white leading-tight mb-2 line-clamp-2">
+            <div className="flex flex-1  flex-col p-2 md:p-4">
+                <h2 className="lg:text-xl text-lg font-bold text-white leading-tight mb-2 line-clamp-2">
                     {item.title}
-                    <span className="ml-2 font-normal text-slate-400">({meta_data.year})</span>
+                    {meta_data?.year && <span className="ml-2 font-normal text-slate-400">({meta_data.year})</span>}
                 </h2>
 
-                <p className="text-slate-400 text-base sm:text-sm uppercase">{parsedGenres}</p>
+                <p className="text-slate-400 lg:text-base text-sm uppercase">{parsedGenres}</p>
                 
-                <p className="text-slate-400 text-base sm:text-sm line-clamp-3 mb-4 grow">
+                <p className="text-slate-400 text-base sm:text-sm flex-grow line-clamp-1 lg:line-clamp-3 mb-4 grow">
                     {item.description || "Описание отсутствует..."}
                 </p>
 
                 {/* ФУТЕР */}
-                <div className="flex justify-between items-center pt-3 border-t border-slate-800">
+                <div className="flex mt-auto text-sm justify-between items-center pt-3 border-t border-slate-800">
                     
                     <div className="flex gap-2 items-center">
 
                         {/* Иконка текущего статуса (если он есть) */}
                         {CurrentStatus && (
                             <button onClick={handleStatusChange} className={`cursor-pointer p-2 sm:p-1.5 rounded-lg bg-slate-800/30 ${CurrentStatus.color}`} title={CurrentStatus.label}>
-                                <CurrentStatus.icon className="w-6 h-6 sm:w-5 sm:h-5" />
+                                <CurrentStatus.icon className="md:w-6 md:h-6 w-4 h-4" />
                             </button>
                         )}
                         

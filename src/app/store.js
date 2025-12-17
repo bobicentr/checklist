@@ -6,6 +6,7 @@ import { kinopoiskApiSlice } from '../features/api/kinopoiskApiSlice'
 import { shikimoriApiSlice } from '../features/api/shikimoriApiSlice'
 import { gamesdbApiSlice } from '../features/api/gamesdbApiSlice'
 import { itunesApiSlice } from '../features/api/itunesApiSlice'
+import filterReducer from '../features/filters/filterSlice'
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +16,8 @@ export const store = configureStore({
     [kinopoiskApiSlice.reducerPath]: kinopoiskApiSlice.reducer,
     [shikimoriApiSlice.reducerPath]: shikimoriApiSlice.reducer,
     [gamesdbApiSlice.reducerPath]: gamesdbApiSlice.reducer,
-    [itunesApiSlice.reducerPath]: itunesApiSlice.reducer
+    [itunesApiSlice.reducerPath]: itunesApiSlice.reducer,
+    filters: filterReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
