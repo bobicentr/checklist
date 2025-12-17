@@ -4,8 +4,12 @@ import { Link } from 'react-router-dom';
 import MediaItem from '../components/MediaItem'
 import FilterComponent from '../components/FilterComponent';
 import {useSelector} from "react-redux";
+import {useState} from "react";
+import MediaModal from "../components/MediaModal";
 
 export default function Home() {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const category = useSelector((state) => state.filters.category);
 
@@ -19,12 +23,10 @@ export default function Home() {
           <h1 className="text-2xl sm:text-3xl font-bold">Чек-лист 🫡</h1>
           
           <div className="flex w-full sm:w-auto gap-3">
-            
-            <Link to={"/addmedia"} className="flex-1 sm:flex-none">
-              <button className="w-full sm:w-auto px-4 py-2 bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 border border-blue-600/20 rounded-xl transition cursor-pointer text-center whitespace-nowrap">
+              
+              <button onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto px-4 py-2 bg-blue-600/20 text-blue-400 hover:bg-blue-600/30 border border-blue-600/20 rounded-xl transition cursor-pointer text-center whitespace-nowrap">
                 Добавить
               </button>
-            </Link>
             
             <button 
               onClick={() => supabase.auth.signOut()}
@@ -56,6 +58,9 @@ export default function Home() {
           </div>
         )}
       </div>
+      {isModalOpen && (
+        <MediaModal onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 }
