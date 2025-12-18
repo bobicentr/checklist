@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import AddMedia from '../pages/AddMedia';
+import MediaDetails from '../pages/MediaDetails';
 
 // Защитник: если нет юзера, кидай на логин
 const PrivateRoute = ({ children }) => {
@@ -23,5 +24,9 @@ export const router = createBrowserRouter([
   {
     path: '/addmedia',
     element: <AddMedia />
+  },
+  {
+    path: '/mediaitem/:id',
+    element: <MediaDetails />
   }
 ]);

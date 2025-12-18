@@ -77,6 +77,7 @@ function RatingComponent ({ CurrentRating, handleRatingChange }) {
                                                 onClick={(e) => {
                                                     handleRatingChange(item)
                                                     setIsRatingMenuOpen(false)
+                                                    e.stopPropagation()
                                                 }} 
                                                 className={`text-amber-500 size={16} ${isFilled ? "fill-current" : ""}`}/>
                                             )

@@ -73,8 +73,17 @@ export const apiSlice = createApi({
         if (error) return (error)
         return {data}
       },
-      invalidatesTags: ['Media']
     }),
+    /* getSingleMedia: builder.query({
+      queryFn: async (id) => {
+        const {data, error} = await supabase
+          .from('media_items')
+          .select('*, profiles(name), reviews(*)')
+          .eq('id', id)
+        if (error) return (error)
+        return {data}
+      },
+    }), */
     upsertReviews: builder.mutation({
       queryFn: async (mediaReview) => {
         const { data, error } = await supabase

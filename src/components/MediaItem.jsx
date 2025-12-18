@@ -6,9 +6,14 @@ import { useSelector } from 'react-redux';
 import { selectUserId } from '../features/auth/authSlice';
 import RatingComponent from '../components/RatingComponent';
 import StatusComponent from './StatusComponent';
+import { useNavigate } from 'react-router-dom';
 
 function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
     const { meta_data } = item;
+    const navigate = useNavigate()
+    const handleCardClick = () => {
+        navigate(`/mediaitem/${item.id}`)
+    }
     const [updateMedia, {isLoading}] = useUpdateMediaMutation()
     const [triggerUpsertReviews, {isUpserting}] = useUpsertReviewsMutation()
     const [deleteMedia, {isLoadingAfterDelete}] = useDeleteMediaMutation()
@@ -22,7 +27,6 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
 
 
     const statusConfig = {
-        planned:     { icon: EyeClosed,     color: "text-white", label: "Ещё не чекал" },
         in_progress: { icon: Eye,           color: "text-blue-500",  label: "В процессе" },
         completed:   { icon: BookmarkCheck, color: "text-green-500", label: "Ознакомился" },
         dropped:     { icon: Trash2,        color: "text-red-500",   label: "Дропнул" },
@@ -68,7 +72,8 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
     const author = item.profiles?.name || 'Нинаю'
 
     return (
-        <div className="relative flex lg:flex-col md:h-full bg-slate-900 rounded-2xl border border-slate-800 shadow-lg group hover:border-slate-700 transition-colors">
+        <div onClick={handleCardClick} 
+        className="relative flex lg:flex-col md:h-full bg-slate-900 rounded-2xl border border-slate-800 shadow-lg group hover:border-slate-700 transition-colors">
 
             {isOwner && (
                 <>
