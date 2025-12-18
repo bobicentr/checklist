@@ -22,7 +22,7 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
 
 
     const statusConfig = {
-        planned:     { icon: EyeClosed,     color: "text-slate-500", label: "Ещё не чекал" },
+        planned:     { icon: EyeClosed,     color: "text-white", label: "Ещё не чекал" },
         in_progress: { icon: Eye,           color: "text-blue-500",  label: "В процессе" },
         completed:   { icon: BookmarkCheck, color: "text-green-500", label: "Ознакомился" },
         dropped:     { icon: Trash2,        color: "text-red-500",   label: "Дропнул" },
@@ -37,8 +37,8 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
             await triggerUpsertReviews({user_id: userId, media_id: item.id, status: value})
         };
         
-        const handleRatingChange = async () => {
-            
+        const handleRatingChange = async (value) => {
+            await triggerUpsertReviews({user_id: userId, media_id: item.id, rating: value})
         };
     
 
@@ -63,6 +63,7 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
     const CurrentCategory = mediaCategory[item.category]
     const currentUserReview = item.reviews.find(review => review.user_id === userId);
     const statusKey = currentUserReview ? currentUserReview.status : null;
+    const CurrentRating =  currentUserReview ? currentUserReview.rating : null
     const CurrentStatus = statusKey ? statusConfig[statusKey] : null;
     const author = item.profiles?.name || 'Нинаю'
 
@@ -176,16 +177,15 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
                 </p>
 
                 {/* ФУТЕР */}
-                <div className="flex mt-auto text-sm justify-between items-center pt-3 border-t border-slate-800">
+                <div className="flex mt-auto text-center text-sm justify-between items-center pt-3 border-t border-slate-800">
                     
                     <StatusComponent isStatusMenuOpen={isStatusMenuOpen} setIsStatusMenuOpen={setIsStatusMenuOpen} handleStatusChange={handleStatusChange} CurrentStatus={CurrentStatus} statusConfig={statusConfig}/>
-                    <p className="font-normal text-slate-400">Добавил {author}</p>
-                    {/* ПРАВАЯ ЧАСТЬ: Оценка друга */}
-                    <div className="flex gap-2">
-                        <button title='Оценки нет' className={``}>
-                            <Annoyed className="w-6 h-6 sm:w-5 sm:h-5 text-amber-400" />
-                        </button>
+                    <div className="flex-1 min-w-0"> 
+                        <span className="text-sm text-slate-400 truncate block">
+                            добавил {author}
+                        </span>
                     </div>
+                    <RatingComponent CurrentRating={CurrentRating} handleRatingChange={handleRatingChange}/>
                 
                 </div>
             </div>

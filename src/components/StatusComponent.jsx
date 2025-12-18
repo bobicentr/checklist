@@ -1,4 +1,4 @@
-import { Pencil, CircleDashed } from "lucide-react";
+import { Pencil, CircleDashed, EyeClosed } from "lucide-react";
 
 
 function StatusComponent ({isStatusMenuOpen, setIsStatusMenuOpen, handleStatusChange, CurrentStatus, statusConfig}) {
@@ -16,7 +16,7 @@ function StatusComponent ({isStatusMenuOpen, setIsStatusMenuOpen, handleStatusCh
                                     p-2 sm:p-1.5 rounded-lg bg-slate-800/30"
                             >
                                 {CurrentStatus && < CurrentStatus.icon className={`w-6 h-6 sm:w-5 sm:h-5 ${CurrentStatus.color}`} />}
-                                {!CurrentStatus && <CircleDashed className="w-6 h-6 sm:w-5 sm:h-5" /> }  
+                                {!CurrentStatus && <EyeClosed className="w-6 h-6 sm:w-5 sm:h-5" /> }  
                             </button>
 
                             {isStatusMenuOpen && (
