@@ -1,15 +1,19 @@
-import { useUpdateMediaMutation, useDeleteMediaMutation } from '../features/api/apiSlice'
+import { useUpdateMediaMutation, useDeleteMediaMutation, useUpsertReviewsMutation } from '../features/api/apiSlice'
 import { Star, BookmarkCheck, Trash2, Eye, EyeClosed, Annoyed, Angry, Smile, CircleDashed } from "lucide-react";
 import { useState } from 'react';
 import { MoreVertical, Pencil, Trash } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { selectUserId } from '../features/auth/authSlice';
+import RatingComponent from '../components/RatingComponent';
+import StatusComponent from './StatusComponent';
 
 function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
     const { meta_data } = item;
     const [updateMedia, {isLoading}] = useUpdateMediaMutation()
+    const [triggerUpsertReviews, {isUpserting}] = useUpsertReviewsMutation()
     const [deleteMedia, {isLoadingAfterDelete}] = useDeleteMediaMutation()
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isStatusMenuOpen, setIsStatusMenuOpen] = useState(false)
     const userId = useSelector(selectUserId);
     const isOwner = userId === item.added_by;
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -18,55 +22,23 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
 
 
     const statusConfig = {
-        planned:     { icon: EyeClosed,     color: "text-slate-500", label: "Буду смотреть" },
-        in_progress: { icon: Eye,           color: "text-blue-500",  label: "Смотрю" },
-        completed:   { icon: BookmarkCheck, color: "text-green-500", label: "Просмотрено" },
-        dropped:     { icon: Trash2,        color: "text-red-500",   label: "Брошено" },
+        planned:     { icon: EyeClosed,     color: "text-slate-500", label: "Ещё не чекал" },
+        in_progress: { icon: Eye,           color: "text-blue-500",  label: "В процессе" },
+        completed:   { icon: BookmarkCheck, color: "text-green-500", label: "Ознакомился" },
+        dropped:     { icon: Trash2,        color: "text-red-500",   label: "Дропнул" },
     };
 
-    const friendRatingConfig = {
-        like:    { icon: Smile,   color: "text-green-500" },
-        dislike: { icon: Angry,   color: "text-red-500" },
-        neutral: { icon: Annoyed, color: "text-yellow-500" },
-    };
 
-    const [localStatus, setLocalStatus] = useState(item.status)
-    const [localRating, setLocalRating] = useState(item.friend_rating)
-
-
-        // Функция, которая объединяет все обновления
         const handleUpdate = async (updates) => {
             await updateMedia({ id: item.id, ...updates });
         };
 
-        const handleStatusChange = async () => {
-            const keys = Object.keys(statusConfig);
-            const currentIndex = keys.indexOf(localStatus);
-            const nextIndex = (currentIndex + 1) % keys.length;
-            const nextStatus = keys[nextIndex];
-        
-            setLocalStatus(nextStatus);
-        
-            try {
-                await handleUpdate({ status: nextStatus });
-            } catch {
-                setLocalStatus(keys[currentIndex]);
-            }
+        const handleStatusChange = async (value) => {
+            await triggerUpsertReviews({user_id: userId, media_id: item.id, status: value})
         };
         
         const handleRatingChange = async () => {
-            const ratings = Object.keys(friendRatingConfig);
-            const currentIndex = ratings.indexOf(localRating);
-            const nextIndex = (currentIndex + 1) % ratings.length;
-            const nextRating = ratings[nextIndex];
-        
-            setLocalRating(nextRating);
-        
-            try {
-                await handleUpdate({ friend_rating: nextRating });
-            } catch {
-                setLocalRating(ratings[currentIndex]);
-            }
+            
         };
     
 
@@ -89,12 +61,13 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
     // Если статус не найден, берем null
 
     const CurrentCategory = mediaCategory[item.category]
-    const CurrentStatus = statusConfig[localStatus]
-    const CurrentFriendRating = friendRatingConfig[localRating];
+    const currentUserReview = item.reviews.find(review => review.user_id === userId);
+    const statusKey = currentUserReview ? currentUserReview.status : null;
+    const CurrentStatus = statusKey ? statusConfig[statusKey] : null;
     const author = item.profiles?.name || 'Нинаю'
 
     return (
-        <div className="relative flex lg:flex-col md:h-full bg-slate-900 rounded-2xl border border-slate-800 shadow-lg overflow-hidden group hover:border-slate-700 transition-colors">
+        <div className="relative flex lg:flex-col md:h-full bg-slate-900 rounded-2xl border border-slate-800 shadow-lg group hover:border-slate-700 transition-colors">
 
             {isOwner && (
                 <>
@@ -205,31 +178,15 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
                 {/* ФУТЕР */}
                 <div className="flex mt-auto text-sm justify-between items-center pt-3 border-t border-slate-800">
                     
-                    <div className="flex gap-2 items-center">
-
-                        {/* Иконка текущего статуса (если он есть) */}
-                        {CurrentStatus && (
-                            <button onClick={handleStatusChange} className={`cursor-pointer p-2 sm:p-1.5 rounded-lg bg-slate-800/30 ${CurrentStatus.color}`} title={CurrentStatus.label}>
-                                <CurrentStatus.icon className="md:w-6 md:h-6 w-4 h-4" />
-                            </button>
-                        )}
-                        
-                        {/* Если статуса нет, можно показать заглушку (опционально) */}
-                        {!CurrentStatus && (
-                             <div className="p-2 sm:p-1.5 text-slate-600" title="Статус не выбран">
-                                <CircleDashed className="w-6 h-6 sm:w-5 sm:h-5" />
-                             </div>
-                        )}
-                    </div>
+                    <StatusComponent isStatusMenuOpen={isStatusMenuOpen} setIsStatusMenuOpen={setIsStatusMenuOpen} handleStatusChange={handleStatusChange} CurrentStatus={CurrentStatus} statusConfig={statusConfig}/>
                     <p className="font-normal text-slate-400">Добавил {author}</p>
                     {/* ПРАВАЯ ЧАСТЬ: Оценка друга */}
                     <div className="flex gap-2">
-                         {CurrentFriendRating && (
-                             <button onClick={handleRatingChange} className={`cursor-pointer p-2 sm:p-1.5 rounded-lg bg-slate-800/30 ${CurrentFriendRating.color}`}>
-                                <CurrentFriendRating.icon className="w-6 h-6 sm:w-5 sm:h-5" />
-                             </button>
-                         )}
+                        <button title='Оценки нет' className={``}>
+                            <Annoyed className="w-6 h-6 sm:w-5 sm:h-5 text-amber-400" />
+                        </button>
                     </div>
+                
                 </div>
             </div>
             {isDeleteModalOpen && (
