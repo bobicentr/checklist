@@ -1,7 +1,14 @@
-import { Pencil, CircleDashed, EyeClosed } from "lucide-react";
+import { Pencil, CircleDashed, EyeClosed, Eye, BookmarkCheck, Trash2 } from "lucide-react";
 
 
-function StatusComponent ({isStatusMenuOpen, setIsStatusMenuOpen, handleStatusChange, CurrentStatus, statusConfig}) {
+function StatusComponent ({isStatusMenuOpen, setIsStatusMenuOpen, handleStatusChange, CurrentStatus}) {
+
+    const statusConfig = {
+            in_progress: { icon: Eye,           color: "text-blue-500",  label: "В процессе" },
+            completed:   { icon: BookmarkCheck, color: "text-green-500", label: "Ознакомился" },
+            dropped:     { icon: Trash2,        color: "text-red-500",   label: "Дропнул" },
+        };
+
     return (
         <div className="relative">
 
@@ -12,8 +19,8 @@ function StatusComponent ({isStatusMenuOpen, setIsStatusMenuOpen, handleStatusCh
                     setIsStatusMenuOpen(!isStatusMenuOpen);
                     }}
                                 data-open={isStatusMenuOpen}
-                                className=" z-30 backdrop-blur-sm transition-all
-                                    p-2 sm:p-1.5 rounded-lg bg-slate-800/30"
+                                className=" z-30 backdrop-blur-sm cursor-pointer transition-all
+                                    p-2 sm:p-1.5 rounded-lg bg-slate-800/30 hover:bg-white/10"
                             >
                                 {CurrentStatus && < CurrentStatus.icon className={`w-6 h-6 sm:w-5 sm:h-5 ${CurrentStatus.color}`} />}
                                 {!CurrentStatus && <EyeClosed className="w-6 h-6 sm:w-5 sm:h-5" /> }  

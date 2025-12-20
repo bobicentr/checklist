@@ -19,7 +19,7 @@ function RatingComponent ({ CurrentRating, handleRatingChange }) {
                     }}
                                 data-open={isRatingMenuOpen}
                                 className=" z-30 backdrop-blur-sm transition-all
-                                    p-2 sm:p-1.5 rounded-lg bg-slate-800/30"
+                                    p-2 sm:p-1.5 rounded-lg bg-slate-800/30 hover:bg-white/10 cursor-pointer"
                             >
 
                                 {CurrentRating ? (

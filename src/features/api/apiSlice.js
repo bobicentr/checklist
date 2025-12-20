@@ -64,32 +64,33 @@ export const apiSlice = createApi({
       },
       invalidatesTags: ['Media'],
     }),
-    getReviews: builder.query({
+    getSingleMedia: builder.query({
       queryFn: async (id) => {
-        const {data, error} = await supabase
-            .from('reviews')
-            .select('*')
-            .eq('media_id', id);
-        if (error) return (error)
-        return {data}
-      },
-    }),
-    /* getSingleMedia: builder.query({
-      queryFn: async (id) => {
-        const {data, error} = await supabase
+        const { data, error } = await supabase
           .from('media_items')
-          .select('*, profiles(name), reviews(*)')
+          .select(`
+            *,
+            profiles(name),
+            reviews(
+              *,
+              profiles(name) 
+            )
+          `)
           .eq('id', id)
-        if (error) return (error)
-        return {data}
+          .single(); 
+    
+        if (error) return { error }; 
+        return { data };
       },
-    }), */
+      // Полезно добавить тег, чтобы при обновлении отзыва страница рендерилась заново
+      providesTags: (result, error, id) => [{ type: 'Media', id }],
+    }),
     upsertReviews: builder.mutation({
       queryFn: async (mediaReview) => {
         const { data, error } = await supabase
           .from('reviews')
           .upsert(mediaReview, {
-            onConflict: 'user_id, media_id' // <--- КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ
+            onConflict: 'user_id, media_id' 
           })
           .select();
           
@@ -102,4 +103,4 @@ export const apiSlice = createApi({
 });
 
 export const { useGetMediaQuery, useAddMediaMutation, useUpdateMediaMutation, 
-useDeleteMediaMutation, useGetReviewsQuery, useUpsertReviewsMutation } = apiSlice;
+useDeleteMediaMutation, useGetReviewsQuery, useUpsertReviewsMutation, useGetSingleMediaQuery } = apiSlice;
