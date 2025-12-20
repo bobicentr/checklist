@@ -57,7 +57,7 @@ function MediaDetails() {
         <div className="bg-slate-950 text-slate-200 min-h-screen w-full relative pb-20">
             {/* ФОНОВЫЙ БЛЮР */}
             <div className="fixed inset-0 z-0">
-                <img src={itemData?.poster_url} className="w-full h-full object-cover opacity-20 blur-[60px] scale-105" alt="" />
+                <img src={itemData?.poster_url} className="w-full h-full object-cover opacity-20 blur-[30px] scale-105" alt="" />
                 <div className="absolute inset-0 bg-slate-950/40" />
             </div>
             
