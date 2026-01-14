@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+
 const api_key = import.meta.env.VITE_GAMESDB_API_KEY;
 
 export const gamesdbApiSlice = createApi({
