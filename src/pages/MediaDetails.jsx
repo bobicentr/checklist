@@ -33,7 +33,6 @@ function MediaDetails() {
     dropped: { icon: Trash2, color: "text-red-500", label: "Дропнул" },
   };
 
-  // Данные твоего отзыва
   const myReview = itemData?.reviews?.find((rev) => rev.user_id === userId);
   const statusKey = myReview?.status;
   const currentRating = myReview?.rating || 0;
@@ -153,7 +152,7 @@ function MediaDetails() {
                                 handleReviewUpsert(
                                   undefined,
                                   undefined,
-                                  commentText
+                                  commentText,
                                 )
                               }
                               className="h-11 px-5 bg-blue-600/20 border border-blue-500/30 text-xs font-bold text-blue-400 rounded-r-xl hover:bg-blue-600/40 transition-all uppercase"
@@ -203,22 +202,18 @@ function MediaDetails() {
                   return (
                     <div
                       key={review.id}
-                      className={`
-                                                bg-slate-900/40 border border-white/5 p-5 rounded-2xl flex gap-4 backdrop-blur-md transition-all
-                                                ${
-                                                  isMe
-                                                    ? "ring-1 ring-indigo-500/30 bg-indigo-500/5"
-                                                    : ""
-                                                }
-                                            `}
+                      className={`bg-slate-900/40 border border-white/5 p-5 rounded-2xl flex gap-4 backdrop-blur-md transition-all
+                        ${
+                          isMe
+                            ? "ring-1 ring-indigo-500/30 bg-indigo-500/5"
+                            : ""
+                        }`}
                     >
-                      {/* Аватарка */}
                       <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-slate-400 border border-white/10 shrink-0">
                         {review.profiles?.name?.charAt(0).toUpperCase()}
                       </div>
 
                       <div className="flex flex-col gap-1 w-full">
-                        {/* ШАПКА: Имя, Рейтинг и Статус теперь в одну линию без justify-between */}
                         <div className="flex flex-wrap items-center gap-3">
                           <span
                             className={`font-bold ${
@@ -240,7 +235,6 @@ function MediaDetails() {
                             </span>
                           )}
 
-                          {/* СТАТУС: Теперь идет сразу после инфо, с небольшим разделителем */}
                           {status && (
                             <div
                               className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-tight ${status.color} opacity-80 border-l border-white/10 pl-3 ml-1`}
@@ -251,7 +245,6 @@ function MediaDetails() {
                           )}
                         </div>
 
-                        {/* Текст комментария */}
                         <p className="text-slate-400 text-sm leading-relaxed mt-1">
                           {review.comment || (
                             <span className="opacity-20 italic">

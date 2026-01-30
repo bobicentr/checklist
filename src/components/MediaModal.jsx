@@ -7,12 +7,10 @@ import { useLazySearchGamesQuery, useLazySearchGameImagesQuery, useLazyGetGameBy
 import { useLazySearchAnimeQuery, useLazySearchMangaQuery, useLazySearchAnimeByIdQuery, useLazySearchMangaByIdQuery } from "../features/api/shikimoriApiSlice";
 
 
-// ПРИНИМАЕМ PROP onClose
 function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
     const user = useSelector((state) => state.auth.user);
     const [addMedia, { isLoading: isAdding }] = useAddMediaMutation();
     
-    // --- ТВОИ ХУКИ API (без изменений) ---
     const [triggerMovieSearch, { data: movieData, isFetching: isSearchingMovies }] = useLazySearchMoviesQuery();
     const [triggerAnimeSearch, { data: animeData, isLoading: isSearchingAnime }] = useLazySearchAnimeQuery();
     const [triggerMangaSearch, { data: mangaData, isLoading: isSearchingManga }] = useLazySearchMangaQuery();
@@ -66,7 +64,6 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
         return baseUrl + boxart.filename;
     };
 
-    // --- ТВОЙ КОНФИГ (без изменений, свернул для краткости ответа, но код тот же) ---
     const categoryConfig = useMemo(() => ({
         movie: {
             triggerFunction: (searchTerm) => triggerMovieSearch({ searchTerm, type: ['FILM'] }),
@@ -137,7 +134,6 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
                         handlers.triggerGetGenresList().unwrap().catch(() => [])
                     ]);
                     let posterUrl = extractBoxart(imagesResponse, game.id);
-                    if (!posterUrl) { /* Fallback logic ... */ }
                     let genreNames = [];
                     if (gameDetails?.genres?.length && allGenresList?.length) {
                         genreNames = gameDetails.genres.map(genreId => {
@@ -178,7 +174,6 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
         }
     }), [user, formData, mediaObject]); 
 
-    // --- USE EFFECTS (без изменений) ---
     useEffect(() => {
         if (!searchQuery.trim() || !isInputFocused) {
             setSearchResults([]);
@@ -235,15 +230,12 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
 
     const isSearching = isSearchingMovies || isSearchingAnime || isSearchingManga || isSearchingGames || isSearchingAlbum || isSearchingArtist;
 
-    // --- ВОТ ТУТ НОВАЯ ВЁРСТКА ---
     return (
-        // 1. BACKDROP (Фон на весь экран)
         <div 
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200"
             onClick={onClose}
         >
             
-            {/* 2. МОДАЛЬНОЕ ОКНО */}
             <div 
                 className="relative w-full max-w-xl bg-gray-900 rounded-2xl border border-gray-800 shadow-2xl 
                     flex flex-col gap-6 p-6 sm:p-8 max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent"
@@ -254,15 +246,12 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
                     ✕
                 </button>
 
-                {/* Заголовок */}
                 <div>
                     <h2 className="text-2xl font-bold text-white">Добавить новую запись</h2>
                 </div>
 
-                {/* ФОРМА (Такая же как была) */}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                     
-                    {/* Выбор категории */}
                     { !itemToEdit && <div>
                         <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-300">Категория</label>
                         <select id="category" value={formData.category} onChange={handleFormChange} className="bg-gray-800 border border-gray-700 text-white text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-colors">
@@ -278,7 +267,6 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
                     }
                     
 
-                    {/* Поиск */}
                     <div className="relative">
                         <label htmlFor="search-input" className="block mb-2 text-sm font-medium text-gray-300">Название</label>
                         <input 
@@ -293,10 +281,8 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
                             placeholder="Начните вводить..." autoComplete="off" required 
                         />
                         
-                        {/* Индикатор поиска */}
                         {isSearching && !itemToEdit && isInputFocused && <div className="absolute right-3 top-10 text-gray-400 text-xs animate-pulse">Ищем...</div>}
                         
-                        {/* Выпадающий список результатов */}
                         {searchResults.length > 0 && !itemToEdit && isInputFocused && (
                             <ul className="absolute z-50 w-full mt-2 bg-gray-800 border border-gray-700 rounded-xl shadow-xl max-h-60 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600">
                                 {searchResults.map((item) => (
@@ -334,7 +320,6 @@ function MediaModal({ onClose, itemToEdit, setItemToEdit }) {
                         ></textarea>
                     </div>
 
-                    {/* Кнопки */}
                     <div className="flex gap-3 pt-2">
                          <button 
                             type="button"

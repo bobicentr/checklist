@@ -1,5 +1,4 @@
 import {
-  // useUpdateMediaMutation,
   useDeleteMediaMutation,
   useUpsertReviewsMutation,
 } from "../features/api/apiSlice";
@@ -28,7 +27,6 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
   const handleCardClick = () => {
     navigate(`/mediaitem/${item.id}`);
   };
-  // const [updateMedia, { isLoading }] = useUpdateMediaMutation();
   const [triggerUpsertReviews] = useUpsertReviewsMutation();
   const [deleteMedia] = useDeleteMediaMutation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -52,10 +50,6 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
     },
     dropped: { icon: Trash2, color: "text-red-500", label: "Дропнул" },
   };
-
-  /* const handleUpdate = async (updates) => {
-    await updateMedia({ id: item.id, ...updates });
-  }; */
 
   const handleStatusChange = async (value) => {
     await triggerUpsertReviews({
@@ -118,7 +112,6 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
 
           {isMenuOpen && (
             <>
-              {/* А) НЕВИДИМАЯ ПОДЛОЖКА (чтобы закрыть кликом вне) */}
               <div
                 className="fixed inset-0 z-40 cursor-default"
                 onClick={(e) => {
@@ -164,7 +157,7 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
 
       <div className="relative w-28 shrink-0 lg:h-60 lg:w-full overflow-hidden">
         <img
-          className="w-full h-full lg:object-cover lg:object-top"
+          className="w-full h-full lg:object-cover lg:object-top rounded-t-2xl"
           src={item.poster_url}
           alt={item.title}
         />
@@ -180,7 +173,6 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
         </div>
       </div>
 
-      {/* Контент */}
       <div className="flex flex-1  flex-col p-2 md:p-4">
         <h2 className="lg:text-xl text-lg font-bold text-white leading-tight mb-2 line-clamp-2">
           {item.title}
@@ -199,7 +191,6 @@ function MediaItem({ item, setItemToEdit, setIsModalOpen }) {
           {item.description || "Описание отсутствует..."}
         </p>
 
-        {/* ФУТЕР */}
         <div className="flex mt-auto text-center text-sm justify-between items-center pt-3 border-t border-slate-800">
           {!user.is_anonymous && (
             <StatusComponent

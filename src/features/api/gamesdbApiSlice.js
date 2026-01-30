@@ -26,13 +26,10 @@ export const gamesdbApiSlice = createApi({
             },
             transformResponse: (response) => response.data.games[0] || null,
         }),
-
-        // НОВЫЙ ЭНДПОИНТ: Получаем ВЕСЬ список жанров
         getGenresList: builder.query({
             query: () => `/api-games/v1/Genres?apikey=${api_key}`,
             transformResponse: (response) => {
                 const genresData = response?.data?.genres;
-                // Защита: если жанры пришли как Объект, превращаем в Массив
                 if (!Array.isArray(genresData) && typeof genresData === 'object' && genresData !== null) {
                     return Object.values(genresData);
                 }
@@ -42,10 +39,9 @@ export const gamesdbApiSlice = createApi({
     })
 });
 
-// ОБЯЗАТЕЛЬНО проверьте, что экспортируете useLazyGetGenresListQuery (PLURAL, список)
 export const {
     useLazySearchGamesQuery,
     useLazySearchGameImagesQuery,
     useLazyGetGameByIdQuery,
-    useLazyGetGenresListQuery // <-- ВАЖНО: Новый хук
+    useLazyGetGenresListQuery
 } = gamesdbApiSlice;
