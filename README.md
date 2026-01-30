@@ -1,17 +1,53 @@
-# React + Vite
+# Media Checklist
+Live Demo - [Ознакомиться](https://checklist-seven-red.vercel.app)
+# О проекте
+Этот проект я делал для себя и своих друзей, чтобы легче было рекомендовать произведения(фильмы, сериалы, игры и т.д.), делиться о них мнением, отслеживать прогресс других людей и не искать рекомендации среди тысяч сообщений в чатах. 
+Также проект был разработан с целью укрепления своих навыков веб-разработки.
+# Технологический стек 
+- ReactJS -- основной фреймворк
+- React Router -- для навигации по страницам
+- Redux Toolkit + RTK Query -- для работы с внешними данными
+- TailwindCSS v4 -- для стилизации элементов
+- Lucide React -- для красивых иконок
+# Как установить локально
+Если хочется такой же проект для личного пользования, можно установить его локально.
+1. **Склонируйте репозиторий**
+   ```bash
+   git clone https://github.com/bobicentr/checklist.git
+   cd checklist
+   ```
+2. **Установите зависимости**
+   ```bash
+   npm install
+   ```
+3. **ВАЖНОЕ: Настроить .env**
+   Добавить ключи от Supabase, KinopoiskAPI, GamesDB, все остальные используют общие публичные ключи.
+   ```bash
+   VITE_SUPABASE_URL=ссылка_на_ваш_проект_в_supabase
+   VITE_SUPABASE_KEY=ваш_публичный_ключ_supabase
+   VITE_KINOPOISK_API_KEY=ваш_ключ
+   VITE_GAMESDB_API_KEY=ваш_ключ
+   ```
+5. **Запустить проект**
+   ```bash
+   npm run dev
+   ```
+   Открыть проект по ссылке из терминала, зачастую [http://localhost:5173](http://localhost:5173)
+# Ключевые функции
+- Авторизация и профили: Работа с сессиями пользователей через Supabase.
+- CRUD операций: Добавление, редактирование и удаление медиа-контента.
+- Система отзывов: Возможность оставлять оценки и комментарии (upsert логика).
+- Умный поиск: Интеграция с внешними API (Kinopoisk, GamesDB).
+- Глобальное состояние: Использование RTK Query для кеширования запросов и мгновенного обновления UI через систему тегов (инвалидация кеша).
+- Полный адаптив: Интерфейс и функционал полностью адаптирован под все устройства.
+# Планы на будущее 
+- Обновить некоторые API для более полных и удобных данных.
+- Добавить новые способы фильтрации (по средней оценке, по пользователю, который добавил произведение и т.д.).
+- Добавить уведомления об обновлениях данных.
+- Создать систему личных коллекций.
+# Скриншоты 
+<img width="1366" height="768" alt="изображение" src="https://github.com/user-attachments/assets/075ce1b3-79d9-4249-a4be-08211b945476" />
+<img width="1366" height="768" alt="изображение" src="https://github.com/user-attachments/assets/66a32769-446e-4b8c-a382-29ac698d71e7" />
+<img width="1366" height="768" alt="изображение" src="https://github.com/user-attachments/assets/628a5337-dd75-44b7-9b05-61a886437877" />
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# checklist
